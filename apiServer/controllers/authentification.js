@@ -1,44 +1,53 @@
-const User = require("../models/User")
-const jwt = require("jsonwebtoken")
+const User = require("../models/User");
+const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv").config();
-const generateJwtToken = (_id, role) => {
-    return jwt.sign({ _id, role }, process.env.SECRET_KEY, {
-      expiresIn: "1d",
+
+exports.signUp = async (req, res) => {
+  try {
+    const user = await User.create({
+      name: req.body.name,
+      email: req.body.email,
+      password: req.body.password,
+      number: req.body.number,
     });
-  };
-exports.SignUp = async (req, res)=>{
-    try{
-        const user = await User.create({
-            name : req.body.name,
-            email : req.body.email,
-            password : req.body.password,
-            number : req.body.number
-        })
-        const token = generateJwtToken (user._id, user.role);
-        res.status(201).json({
-            user:user,
-            token
-        })
-    } catch(error){
-        res.send(error)
+
+    console.log("done");
+    const token = jwt.sign({ id: user.id }, process.env.SECRET_KEY, {
+      expiresIn: process.env.EXPIRE_IN,
+    });
+
+    console.log(token);
+
+    res.status(201).json({
+      user: user,
+      token: token, 
+    });
+  } catch (error) {
+    res.status(400).send(error);
+  }
+};
+
+exports.signIn = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ where: { email: email } });
+
+    if (!user || !user.password == password) {
+      res.status(401).json({
+        message: "email or password not correct",
+      });
+    } else {
+      const token = jwt.sign({ id: user.id }, process.env.SECRET_KEY, {
+        expiresIn: process.env.EXPIRE_IN,
+      });
+
+      res.status(201).json({
+        message: "success",
+        token: token,
+      });
     }
-}
-exports.SignIn = async (req, res)=>{
-    try{
-        const {email, password} = req.body
-    const user = await User.findOne({where:{email:email}&&{password:password}})
-    if(!user || !user.password == password){
-        res.status(401).json({
-            message : 'email or password not correct'
-        })
-    }
-    const token = generateJwtToken(user._id, user.role)
-        res.status(200).json({
-            message:'sucess',
-            token
-        })
-}catch (error){
-    res.status(401).send(error)
-    console.log(error);
-}
-}
+  } catch (error) {
+    res.status(401).send(error);
+  }
+};

@@ -11,8 +11,9 @@ Order.init({
     },
 
     status: {
-        type: DataTypes.STRING,
-        allowNull: false
+        type: DataTypes.ENUM,
+        values: ['Cooking', 'Delivering','Done'],
+        defaultValue: 'Cooking',
 
     },
 
