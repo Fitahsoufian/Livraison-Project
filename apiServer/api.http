@@ -1,11 +1,12 @@
 POST http://localhost:3030/api/createorder
 Content-Type: application/json
-Authorization: "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjQ4ODI2OTQxLCJleHAiOjE2NDkxNTA5NDF9.1NNokNsIg9oZnJgam7vZqndJ4pNGmu6NEjiCEPT5cU8"
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwicm9sZSI6ImNsaWVudCIsImlhdCI6MTY0OTQxMTg4NiwiZXhwIjoxNjQ5NzM1ODg2fQ.FjIc0ekLOMR41QZYSEPM_5W6rEKwsdtnhoep63vNeaY
 
-[
-    {
-      "adresse" : "youyou city"
-    }
+{
+    "adresse" : "youyou city",
+  "repasorders[0][RepaId]": "2",
+  "repasorders[0][quantity]":"2"
+}
 
-]
+
 

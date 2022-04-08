@@ -1,47 +1,76 @@
-const db = require("../models");
-const User = db.users;
-const Op = db.Sequelize.Op;
-// Create and Save a new Tutorial
-exports.create = (req, res) => {
-   // Validate request
-   if (!req.body.name) {
-    res.status(400).send({
-      message: "Content can not be empty!"
-    });
-    return;
-  }
-  // Create a User
-  const users = {
-    name: req.body.name,
-    email: req.body.email,
-    password: req.body.password,
-    number: req.body.number
-  };
-  // Save User in the database
-  User.create(user)
-    .then(data => {
-      res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while creating the User."
-      });
-    });
+const User = require("../models/User");
+
+
+exports.createUser = async (req, res) => {
+    try {
+        const users = await User.create({
+          name: req.body.name,
+          email: req.body.email,
+          password: req.body.password,
+          number: req.body.number,
+        });
+    
+        console.log("done");
+    
+        res.status(201).json({
+          users: users,
+        });
+      } catch (error) {
+        res.status(400).send(error);
+        console.log(error);
+      }
+    };
+
+
+exports.findUsers = async (req, res) => {
+    try {
+    
+        const users = await User.findAll();
+    
+        if (!users) {
+          res.status(401).json({
+            message: "users not found",
+          });
+        } else {
+          res.status(201).json({
+            message: "success",
+            users:users
+          });
+        }
+      } catch (error) {
+        res.status(401).send(error);
+      }
+    
 };
-// Retrieve all Tutorials from the database.
-exports.findAll = (req, res) => {
-  
-};
-// Find a single Tutorial with an id
-exports.findOne = (req, res) => {
-  
-};
-// Update a Tutorial by the id in the request
-exports.update = (req, res) => {
-  
-};
-// Delete a Tutorial with the specified id in the request
-exports.delete = (req, res) => {
-  
-};
+exports.updateUser = async (req,res)=>{
+    try {
+        const id = req.params.id
+        const data = req.body
+
+        const users = await User.update(data,{where: {id: id}})
+
+        res.status(200).json({
+            message: 'user updated successfully',
+            users:users
+        })
+    } catch (error) {
+        res.send(error)
+        
+    }
+}
+
+
+exports.deleteUser = async (req,res)=>{
+    try {
+        const id = req.params.id
+
+        const users = await User.destroy({where: {id: id}})
+
+        res.status(200).json({
+            message: 'user deleted successfully'
+        })
+    } catch (error) {
+        res.send(error)
+        
+    }
+}

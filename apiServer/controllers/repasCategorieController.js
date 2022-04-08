@@ -1,6 +1,6 @@
 const Repas = require("../models/RepasCategorie");
 
-// Create and Save a new Tutorial
+
 exports.createRepasCategorie = async (req, res) => {
     try {
         const repas = await Repas.create({
@@ -18,7 +18,7 @@ exports.createRepasCategorie = async (req, res) => {
       }
     };
 
-// Retrieve all Tutorials from the database.
+
 exports.findRepasCategories = async (req, res) => {
     try {
     
@@ -26,7 +26,7 @@ exports.findRepasCategories = async (req, res) => {
     
         if (!repas) {
           res.status(401).json({
-            message: "email or password not correct",
+            message: "categories not found",
           });
         } else {
           res.status(201).json({
@@ -47,7 +47,7 @@ exports.updateRepasCategorie = async (req,res)=>{
         const repas = await Repas.update(data,{where: {id: id}})
 
         res.status(200).json({
-            message: 'repas updated successfully',
+            message: 'categorie updated successfully',
             repas: repas
         })
     } catch (error) {
@@ -64,7 +64,7 @@ exports.deleteRepasCategorie = async (req,res)=>{
         const repas = await Repas.destroy({where: {id: id}})
 
         res.status(200).json({
-            message: 'repas deleted successfully'
+            message: 'categorie deleted successfully'
         })
     } catch (error) {
         res.send(error)

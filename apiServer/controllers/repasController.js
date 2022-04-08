@@ -1,6 +1,6 @@
 const {Repas} = require("../config/Migrations");
 
-// Create and Save a new Tutorial
+
 exports.createRepas = async (req, res) => {
     try {
       
@@ -23,7 +23,7 @@ exports.createRepas = async (req, res) => {
       }
     };
 
-// Retrieve all Tutorials from the database.
+
 exports.findRepas = async (req, res) => {
     try {
     
@@ -31,7 +31,7 @@ exports.findRepas = async (req, res) => {
     
         if (!repas) {
           res.status(401).json({
-            message: "email or password not correct",
+            message: "repas not found",
           });
         } else {
           res.status(201).json({

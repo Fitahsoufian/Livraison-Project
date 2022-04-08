@@ -1,21 +1,12 @@
-module.exports = app => {
-    const users = require("../controllers/userController");
+const express = require('express');
+const router = express.Router();
+const {createUser , findUsers, updateUser, deleteUser} = require("../controllers/userController");
+router.post('/createuser',createUser);
+router.get('/getusers', findUsers);
+router.put('/updateuser/:id',updateUser);
+router.delete('/deleteuser/:id',deleteUser);
 
-    var router = require("express").Router();
-    // Create a new Tutorial
-    router.post("/Singin", user.create);
-    // Retrieve all Tutorials
-    router.get("/", tutorials.findAll);
-    // Retrieve all published Tutorials
-    router.get("/published", tutorials.findAllPublished);
-    // Retrieve a single Tutorial with id
-    router.get("/:id", tutorials.findOne);
-    // Update a Tutorial with id
-    router.put("/:id", tutorials.update);
-    // Delete a Tutorial with id
-    router.delete("/:id", tutorials.delete);
-    // Delete all Tutorials
-    router.delete("/", tutorials.deleteAll);
-    app.use('/api/tutorials', router);
-  };
-  
+
+
+
+module.exports = router;

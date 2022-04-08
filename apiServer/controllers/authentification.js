@@ -12,7 +12,7 @@ exports.signUp = async (req, res) => {
     });
 
     console.log("done");
-    const token = jwt.sign({ id: user.id }, process.env.SECRET_KEY, {
+    const token = jwt.sign({ id: user.id, role: user.role}, process.env.SECRET_KEY, {
       expiresIn: process.env.EXPIRE_IN,
     });
 

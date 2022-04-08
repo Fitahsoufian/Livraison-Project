@@ -1,14 +1,26 @@
-const Order = require("../models/Order");
+const {Order} = require("../config/Migrations");
+const {RepasOrder}= require("../config/Migrations")
+const jwt = require('jsonwebtoken')
+const dotenv = require("dotenv").config();
 
-// Create and Save a new Tutorial
+
 exports.createOrder = async (req, res) => {
-    try {
-       console.log(req.body.adresse); 
+  const token = req.headers.authorization;
+  const payload = jwt.decode(token, process.env.SECRET_KEY)
+    try { 
         const orders = await Order.create({
           status: req.body.status,
-          adresse: req.body.adresse
+          adresse: req.body.adresse,
+          clientIdId: payload.id
         });
-    
+  req.body.repasorders.forEach (async (order) => {
+   await RepasOrder.create({
+      quantity : order.quantity,
+      RepaId : order.RepaId,
+      OrderId :  orders.id
+  });
+  console.log('RepaId', order.RepaId);
+});
         console.log("done");
     
         res.status(201).json({
@@ -20,7 +32,31 @@ exports.createOrder = async (req, res) => {
       }
     };
 
-// Retrieve all Tutorials from the database.
+    exports.updateOrderStatus = async (req,res)=>{
+      const id = req.params.id
+      const {status} = req.body
+  
+      try {
+          if(!status || !id){
+              res.status(400).json({
+                  message: 'please insert a status or id'
+              })
+          }
+  
+  
+          const updateStatus = await Order.update({status: status}, {where: {id: id}})
+  
+          res.status(200).json({
+              message: 'status updated successfully',
+              updateStatus
+          })
+      } catch (error) {
+          res.send(error)
+          
+      }
+  }
+
+
 exports.findOrders = async (req, res) => {
     try {
     
@@ -28,7 +64,7 @@ exports.findOrders = async (req, res) => {
     
         if (!orders) {
           res.status(401).json({
-            message: "email or password not correct",
+            message: "oders not found",
           });
         } else {
           res.status(201).json({

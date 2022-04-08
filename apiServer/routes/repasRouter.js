@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require("multer")
 const shortid = require("shortid")
+const {checkClientRole }= require("./../middlewars/roleMiddleware")
 const {createRepas , findRepas, updateRepas, deleteRepas} = require("../controllers/repasController");
 const path = require('path');
 const storage = multer.diskStorage({
@@ -15,7 +16,7 @@ const storage = multer.diskStorage({
 const Upload= multer({storage})
 
 router.post('/createrepas',Upload.single('image'), createRepas);
-router.get('/getrepas', findRepas);
+router.get('/getrepas',checkClientRole, findRepas);
 router.put('/updaterepas/:id',updateRepas);
 router.delete('/deleterepas/:id',deleteRepas);
 
