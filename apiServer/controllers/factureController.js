@@ -19,41 +19,40 @@ exports.createFacture = async (req,res)=>{
             totalPrix: totalPrice,
             OrderId: orderId
         })
-
-        console.log(facture);
-    
+        
     
         let transporter = nodemailer.createTransport({
-            host: "smtpout.secureserver.net",
+            host: "smtp.ethereal.email",
             secure: false,
             secureConnection: false, // TLS requires secureConnection to be false
             tls: {
             ciphers: "SSLv3",
             },
             requireTLS: true,
-            port: 465,
+            port: 587,
             service: 'outlook',
             debug: true, 
             auth: {
-            user: `fitahsoufian@outlook.com`, 
+            user: `fitahsoufian@outlook.fr`, 
             pass: `SFTSFT99`, 
             },
         });
     
-        let info = await transporter.sendMail({
-            from: '"Dark sider" fitahsoufian@outlook.com', 
-            to: "fitahsoufian7@gmail.com", 
+     await transporter.sendMail({
+            from: '"Dark sider" fitahsoufian@outlook.fr', 
+            to: `${user.email}`, 
             subject: "facture de l'ordre",
             text: "test", 
             html: `<b>Facture de l'order</b>
-                    ${user.email}
+                    ${order.adresse}
+                    
                     Here is you  Bill`, 
         });
     
     
         console.log('here');
         res.status(200).json({
-            message: 'facture created successfully'
+            message: 'facture created successfully',facture 
         })
         
     } catch (error) {
